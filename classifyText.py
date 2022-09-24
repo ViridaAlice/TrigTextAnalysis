@@ -27,7 +27,7 @@ def main():
     sentence_model = spacy.blank("en")
     sentence_model.add_pipe("sentencizer")
 
-    with open ("gt_data/data_to_analyse2.txt", "r") as f:
+    with open ("gt_data/data_to_analyse.txt", "r") as f:
         text = f.read()
 
     sentences = sentence_model(text)
