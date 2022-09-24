@@ -9,10 +9,10 @@ def main():
     data["emotional"] = open('gt_data/marked_text_emotional.txt', "r").read().splitlines()
     data["physical"] = open('gt_data/marked_text_physical.txt', "r").read().splitlines()
     data["none"] = open('gt_data/marked_text_none.txt', "r").read().splitlines()
-    data["psych and physical"] = open('marked_text_psychAndphys.txt', 'r').read().splitlines()
-    data["psych and emotional"] = open('marked_text_psychAndemo.txt', "r").read().splitlines()
-    data["phys and emotional"] = open('marked_text_physAndemo.txt', "r").read().splitlines()
-    data["phys and emotional and psych"] = open('marked_text_physEmoPsych.txt', "r").read().splitlines()
+    data["psych and physical"] = open('gt_data/marked_text_psychAndphys.txt', 'r').read().splitlines()
+    data["psych and emotional"] = open('gt_data/marked_text_psychAndemo.txt', "r").read().splitlines()
+    data["phys and emotional"] = open('gt_data/marked_text_physAndemo.txt', "r").read().splitlines()
+    data["phys and emotional and psych"] = open('gt_data/marked_text_physEmoPsych.txt', "r").read().splitlines()
 
     nlp = spacy.blank("en")
     nlp.add_pipe(
@@ -27,7 +27,7 @@ def main():
     sentence_model = spacy.blank("en")
     sentence_model.add_pipe("sentencizer")
 
-    with open ("data/data_to_analyse2.txt", "r") as f:
+    with open ("gt_data/data_to_analyse2.txt", "r") as f:
         text = f.read()
 
     sentences = sentence_model(text)
@@ -48,21 +48,21 @@ def main():
 
     for item in final_data:
         if item["cats"]["psychological"] > .8:
-            psychViol_sentences.write("'"+item["sentence"].strip()+"': "+item["cats"]+"\n")
+            psychViol_sentences.write("'"+item["sentence"].strip()+"': "+str(item["cats"])+"\n")
         if item["cats"]["emotional"] > .8:
-            emoViol_sentences.write("'"+item["sentence"].strip()+"': "+item["cats"]+"\n")
+            emoViol_sentences.write("'"+item["sentence"].strip()+"': "+str(item["cats"])+"\n")
         if item["cats"]["physical"] > .8:
-            physViol_sentences.write("'"+item["sentence"].strip()+"': "+item["cats"]+"\n")
+            physViol_sentences.write("'"+item["sentence"].strip()+"': "+str(item["cats"])+"\n")
         if item["cats"]["none"] > .8:
-            noViol_sentences.write("'"+item["sentence"].strip()+"': "+item["cats"]+"\n")
+            noViol_sentences.write("'"+item["sentence"].strip()+"': "+str(item["cats"])+"\n")
         if item["cats"]["psych and physical"] > .8:
-            psychAndphysViol_sentences.write("'"+item["sentence"].strip()+"': "+item["cats"]+"\n")
+            psychAndphysViol_sentences.write("'"+item["sentence"].strip()+"': "+str(item["cats"])+"\n")
         if item["cats"]["psych and emotional"] > .8:
-            psychAndemoViol_sentences.write("'"+item["sentence"].strip()+"': "+item["cats"]+"\n")
+            psychAndemoViol_sentences.write("'"+item["sentence"].strip()+"': "+str(item["cats"])+"\n")
         if item["cats"]["phys and emotional"] > .8:
-            physAndemoViol_sentences.write("'"+item["sentence"].strip()+"': "+item["cats"]+"\n")
+            physAndemoViol_sentences.write("'"+item["sentence"].strip()+"': "+str(item["cats"])+"\n")
         if item["cats"]["phys and emotional and psych"] > .8:
-            physEmoPsychViol_sentences.write("'"+item["sentence"].strip()+"': "+item["cats"]+"\n")
+            physEmoPsychViol_sentences.write("'"+item["sentence"].strip()+"': "+str(item["cats"])+"\n")
             
 
 
