@@ -37,10 +37,32 @@ def main():
         doc = nlp(sentence.text)
         final_data.append({"sentence": doc.text, "cats": doc._.cats})
     
+    noViol_sentences = open('spacy/marked_text_none.txt', 'w')
+    physViol_sentences = open('spacy/marked_text_physical.txt', 'w')
+    emoViol_sentences = open('spacy/marked_text_emotional.txt', 'w')
+    psychViol_sentences = open('spacy/marked_text_psychological.txt', 'w')
+    psychAndphysViol_sentences = open('spacy/marked_text_psychAndphys.txt', 'w')
+    psychAndemoViol_sentences = open('spacy/marked_text_psychAndemo.txt', 'w')
+    physAndemoViol_sentences = open('spacy/marked_text_physAndemo.txt', 'w')
+    physEmoPsychViol_sentences = open('spacy/marked_text_physEmoPsych.txt', 'w')
+
     for item in final_data:
+        if item["cats"]["psychological"] > .8:
+            psychViol_sentences.write("'"+item["sentence"].strip()+"': "+item["cats"]+"\n")
+        if item["cats"]["emotional"] > .8:
+            emoViol_sentences.write("'"+item["sentence"].strip()+"': "+item["cats"]+"\n")
+        if item["cats"]["physical"] > .8:
+            physViol_sentences.write("'"+item["sentence"].strip()+"': "+item["cats"]+"\n")
+        if item["cats"]["none"] > .8:
+            noViol_sentences.write("'"+item["sentence"].strip()+"': "+item["cats"]+"\n")
+        if item["cats"]["psych and physical"] > .8:
+            psychAndphysViol_sentences.write("'"+item["sentence"].strip()+"': "+item["cats"]+"\n")
         if item["cats"]["psych and emotional"] > .8:
-            print (item["sentence"].strip())
-            print (item["cats"])
+            psychAndemoViol_sentences.write("'"+item["sentence"].strip()+"': "+item["cats"]+"\n")
+        if item["cats"]["phys and emotional"] > .8:
+            physAndemoViol_sentences.write("'"+item["sentence"].strip()+"': "+item["cats"]+"\n")
+        if item["cats"]["phys and emotional and psych"] > .8:
+            physEmoPsychViol_sentences.write("'"+item["sentence"].strip()+"': "+item["cats"]+"\n")
             
 
 
