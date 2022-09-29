@@ -1,20 +1,26 @@
+# Written by Alice Elisabeth Rahn, M-Nr: 122592
+# Identifying Triggering Content in Literary Media 
+# Magdalena Wolska, SS 2022, University Weimar
+
 import os
 
 def main():
-    stripped_text = open('split_text.txt', 'r')
+    # Read in hand-annotated split_data.txt as Input
+    stripped_text = open('spacy/split_data.txt', 'r')
     
-    noViol_sentences = open('marked_text_none.txt', 'w')
-    physViol_sentences = open('marked_text_physical.txt', 'w')
-    emoViol_sentences = open('marked_text_emotional.txt', 'w')
-    psychViol_sentences = open('marked_text_psychological.txt', 'w')
-    psychAndphysViol_sentences = open('marked_text_psychAndphys.txt', 'w')
-    psychAndemoViol_sentences = open('marked_text_psychAndemo.txt', 'w')
-    physAndemoViol_sentences = open('marked_text_physAndemo.txt', 'w')
-    physEmoPsychViol_sentences = open('marked_text_physEmoPsych.txt', 'w')
+    # Open or create files for the (overlapping) categories as Output
+    noViol_sentences = open('gt_data/marked_text_none.txt', 'a')
+    physViol_sentences = open('gt_data/marked_text_physical.txt', 'a')
+    emoViol_sentences = open('gt_data/marked_text_emotional.txt', 'a')
+    psychViol_sentences = open('gt_data/marked_text_psychological.txt', 'a')
+    psychAndphysViol_sentences = open('gt_data/marked_text_psychAndphys.txt', 'a')
+    psychAndemoViol_sentences = open('gt_data/marked_text_psychAndemo.txt', 'a')
+    physAndemoViol_sentences = open('gt_data/marked_text_physAndemo.txt', 'a')
+    physEmoPsychViol_sentences = open('gt_data/marked_text_physEmoPsych.txt', 'a')
     
     strippedLines = stripped_text.readlines()
   
-    # Strips the newline character
+    # Evaluate hand-annotated Input and write sentences to respective files depending on their tags
     for line in strippedLines:
         characterisation = line.split("{")
         if len(characterisation) == 2:
@@ -27,6 +33,7 @@ def main():
                 emot = True
             if any(tag.strip("}").strip() == "psychological_violence: y" for tag in tagList):
                 psych = True
+            
             if not phys and not psych and not emot:
                 noViol_sentences.write(characterisation[0]+"\n")
             if phys and not psych and not emot:
@@ -35,7 +42,7 @@ def main():
                 psychViol_sentences.write(characterisation[0]+"\n")
             if not phys and not psych and emot:
                 emoViol_sentences.write(characterisation[0]+"\n")
-            if phys and not psych and emot:
+            if not phys and psych and emot:
                 psychAndemoViol_sentences.write(characterisation[0]+"\n")
             if phys and psych and not emot:
                 psychAndphysViol_sentences.write(characterisation[0]+"\n")
@@ -44,25 +51,6 @@ def main():
             if phys and psych and emot:
                 physEmoPsychViol_sentences.write(characterisation[0]+"\n")
             
-
-
-            """
-            tagged = False
-            if tagList[0].strip("}").strip() == "physical_violence: y" and \
-                tagList[1].strip("}").strip() == "psychological_violence: n" and \
-                tagList[2].strip("}").strip() == "emotional_violence: n":
-                    physViol_sentences.write(characterisation[0]+"\n")
-                    tagged = True
-            if tag.strip("}").strip() == "emotional_violence: y" or tag.strip("}").strip() == "emotional_violence: y}":
-                emoViol_sentences.write(characterisation[0]+"\n")
-                tagged = True
-            if tag.strip("}").strip() == "psychological_violence: y":
-                psychViol_sentences.write(characterisation[0]+"\n")
-                tagged = True
-            if tagged == False:
-                noViol_sentences.write(characterisation[0]+"\n")
-            """
-
 
 if __name__ == "__main__":
     main()
